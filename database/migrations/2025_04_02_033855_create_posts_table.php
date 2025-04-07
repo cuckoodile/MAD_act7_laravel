@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('thumbnail_link')->default(null);
             $table->timestamps();
 
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('user_profiles')->onDelete('cascade');
         });
     }
 

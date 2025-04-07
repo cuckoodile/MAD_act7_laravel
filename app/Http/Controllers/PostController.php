@@ -12,9 +12,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::get();
+        $posts = Post::with('userprofile')
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+            ->get();
 
-        return $this->Ok($posts, "Posts has been retrieved");
+        return $this->Ok($posts, "Posts have been retrieved");
     }
 
     /**
@@ -65,6 +67,16 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
+        $post = Post::find($id);
+
+        if (empty($post)) 
+        {
+            return $this->NotFound("Post id $id does not exist!");
+        }
+
+        $post->delete();
+
+        return $this->Ok($post, "Post id: $id has been deleted!");
     }
 }

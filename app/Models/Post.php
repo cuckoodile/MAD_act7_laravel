@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'created_by',
         'description',
@@ -13,8 +16,9 @@ class Post extends Model
         'thumbnail_link',
     ];
 
-    public function user()
+    // Define the relationship with the UserProfile model
+    public function userprofile()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(UserProfile::class, 'created_by', 'id');
     }
 }
