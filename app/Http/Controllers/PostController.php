@@ -59,7 +59,30 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $post = Post::find($id);
+
+        if (empty($post)) 
+        {
+            return $this->NotFound("Post id $id does not exist!");
+        }
+
+        $inputs = $request->all();
+
+        $validator = validator()->make($inputs, [
+            "created_by" => "sometimes|integer|min:1|max:9",
+            "description" => "sometimes|string|max:255",
+            "media_link" => "sometimes|string",
+            "thumbnail_link" => "sometimes|string",
+        ]);
+
+        if ($validator->fails()) 
+        {
+            return $this->BadRequest($validator, "Error updating post!");
+        }
+
+        $post->update($validator->validated());
+
+        return $this->Ok($post, "Post id: $id has been updated!");
     }
 
     /**
